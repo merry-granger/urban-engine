@@ -13,44 +13,60 @@ exports.add = async (req, res) =>{
             handle.messageSend(res, 200, 'model was saved successful')
         });
     }catch(error){
-        handle.messageSend( error, res, 400, 'Something wrong')
+        console.log(error)
     }
 };
 exports.get = async (req, res) =>{
     try{
         const model = await schema
-        .find();
+        .find({});
     if (!model.length){
-        return handle.messageSend(error, res, 404, 'not found')
+
     }
-    handle.objectSend(res, 200, model)
+        res
+            .status(200)
+            .contentType("text/plain")
+            .send(model)
+
     }catch(error){
-        handle.messageSend( error, res, 400, 'Something wrong')
+        console.log(error)
     }
 };
 exports.put = async (req, res) =>{
     try{
-        await schema.findByIdAndUpdate({_id: req.body.id}, {
-            title: req.body.title
+        await schema.findByIdAndUpdate({_id:req.body.data.id}, {
+            title: req.body.data.title
         }, (err) =>{
             if(err) {
-                return handle.errorSend( error, res, 404, 'not found')
+                return  res
+                    .status(400)
+                    .contentType("text/plain")
+                    .end('something wrong')
             }
-            handle.messageSend(res, 200, 'update was successful')
+            return res
+                    .status(200)
+                    .contentType("text/plain")
+                    .end('delete success')
         });
     }catch(error){
-        handle.messageSend( error, res, 400, 'Something wrong')
+        // console.log(error)
     }
 };
 exports.delete = async (req, res) =>{
     try{
         await schema.findByIdAndDelete({_id: req.body.id}, (err) =>{
             if(err){
-                return handle.errorSend(error, res, 500, 'Something wrong')
-            }
-            handle.messageSend(res, 200, 'delete was successful')
+            return  res
+                        .status(400)
+                        .contentType("text/plain")
+                        .end('something wrong')
+                }
         })
+        res
+            .status(200)
+            .contentType("text/plain")
+            .end('delete success')
     }catch(error){
-        handle.messageSend( error, res, 400, 'Something wrong')
+        console.log(error)
     }
 };

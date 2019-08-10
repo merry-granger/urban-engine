@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const keys = require("./keys");
+const keys = require("./dev");
 const options = {
     reconnectTries: Number.MAX_VALUE,
     reconnectInterval: 1000,
